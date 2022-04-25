@@ -34,18 +34,16 @@ p {
   align-items: center;
   width: 30%;
   height: 31px;
-  /* border: 1px solid red; */
   border-radius: 40px;
   background: #f8f8f8;
   margin-top: 8px;
   margin-left: 12px;
   margin-bottom: 8px;
 }
-
 .button1 {
   width: 120px;
   height: 32px;
-  margin: 20px 8px;
+  margin: 10px 8px;
   float: left;
   background: #dcdcdc;
   border-radius: 4px;
@@ -57,11 +55,9 @@ p {
   font-size: 16px;
   line-height: 24px;
 }
-
 span {
   margin-right: 10px;
 }
-
 .button2 {
   width: 80px;
   float: left;
@@ -74,17 +70,17 @@ span {
   line-height: 24px;
   border: none;
   height: 32px;
-  margin: 20px 8px;
+  margin: 10px 8px;
   color: #007bc3;
   background: #ffffff;
   box-shadow: 0px 1px 8px rgba(102, 102, 102, 0.2);
   border-radius: 4px;
 }
-
 .content {
   position: absolute;
-  left: 34.1%;
-  height: 207px;
+  width: 480px;
+  right: 0;
+  height: 205px;
   background-color: #fff;
   z-index: 999;
   box-shadow: 0px 1px 8px rgba(102, 102, 102, 0.2);
@@ -96,22 +92,20 @@ input :hover {
 }
 .content::-webkit-scrollbar {
   width: 8px;
-  height: 62px;
+  height: 20px;
   display: block;
   border-radius: 6px;
   background: #dcdcdc;
 }
-
 .content_option {
   display: flex;
   padding: 10px;
 }
-
 .content_option:hover {
   background: #e7f1fd;
 }
-
 .Containerr {
+  position: absolute;
   width: 480px;
   margin: 10px auto;
   display: flex;
@@ -123,33 +117,19 @@ input :hover {
   cursor: pointer;
   flex-wrap: wrap;
 }
-
-.ontainer {
-  width: 450px;
-  position: relative;
-  background-color: #fff;
-  padding: 6px 12px;
-  margin: 0 auto;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  height: 40px;
-  max-width: 250px;
-  display: flex;
-  flex-wrap: wrap;
+.Container {
+    margin: 0 auto;
+    width: 480px;
+    position: relative;
 }
-
 .content_checkbox {
   width: 18px;
   height: 18px;
-
   margin-right: 7px;
   position: relative;
   outline: none;
   display: inline-block;
   vertical-align: middle;
-
   border: 1px solid #000;
   outline: none;
   cursor: pointer;
@@ -208,24 +188,23 @@ input:checked {
   font-size: 18px;
   line-height: 20px;
   width: 430px;
-  /* identical to box height, or 150% */
   display: flex;
   align-items: center;
-
-  /* Text/Black */
-
   color: #333333;
 }
 .icon {
   cursor: pointer;
   position: relative;
-  right: 30px;
+  float: right;
+  z-index: 999;
+  top: -29px;
+  right: 3%;
 }
-
 .content_button {
   position: absolute;
-  top: 50.5%;
-  left: 33.5%;
+  width: 480px;
+  left: -4px;
+  top: 288%;
 }
 .disabled-btn {
   background: #007bc3;

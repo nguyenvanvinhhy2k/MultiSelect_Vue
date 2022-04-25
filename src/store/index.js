@@ -1,135 +1,67 @@
-<template>
-  <div class="">
-    <div class="Container">
-      <input
-        @click="handleClick"
-        style="margin-top: 55px"
-        type="text"
-        placeholder="Chọn Thành Phố"
-        @input="handleInput"
-      />
-      <span>
-        <svg
-          @click="handleClick"
-          class="icon"
-          xmlns="http://www.w3.org/2000/svg"
-          width="10"
-          height="6"
-          viewBox="0 0 8 4"
-          fill="none"
-        >
-          <path d="M8 0H0L4 4L8 0Z" fill="#666666" /></svg
-      ></span>
-      <div class="content" v-show="focused">
-        <div
-          class="content_option"
-          v-for="city in filterCitys"
-          :key="city.code"
-        >
-          <input
-            class="content_checkbox checked"
-            type="checkbox"
-            @change="selectedCitys($event, city)"
-            :checked="selectCitys.some((item) => item == city.name)"
-          />
-          <div class="content_text">{{ city.name }}</div>
-        </div>
-      </div>
-      <div class="Containerr" v-if="selectCitys.length > 0">
-        <div
-          class="Container_text"
-          v-for="selectCity in selectCitys"
-          :key="selectCity"
-        >
-          <p class="">{{ selectCity }}</p>
-          <span @click="removeSelectCity(selectCity)"
-            ><img src="../assets/remove.jpg" alt=""
-          /></span>
-        </div>
-      </div>
-      <div class="content_button" v-show="focused">
-        <button
-          :class="{ 'disabled-btn': selectCitys.length >= 0 }"
-          @click="focused = !focused"
-          class="button1"
-        >
-          Đồng ý
-        </button>
-        <button @click="focused = false" class="button2">Hủy</button>
-      </div>
-    </div>
-  </div>
-</template>
-<script>
+import Vue from "vue";
+import Vuex from "vuex";
+import axios from "axios";
 
-import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+Vue.use(Vuex);
 
-export default {
-  name: "MultiSelect",
-  data() {
-    return {
-      focused: false,
-      show: true,
-      search: "",
-    };
-  },
-  watch: {
-    search: {
-      handler(val) {
-        let newFilterCitys = [];
-        if (val !== "") {
-          newFilterCitys = this.citys.filter((data) =>
-            data.name.toLowerCase().includes(val.toLowerCase())
-          );
-        } else {
-          newFilterCitys = JSON.parse(JSON.stringify(this.citys));
-        }
-        this.setFilterCitys(newFilterCitys);
-      },
-      immediate: true,
+var baseUrl = "https://provinces.open-api.vn/api/?depth=1";
+
+export default new Vuex.Store({
+    state: {
+        search: "",
+        citys: [],
+        selectCitys: [],
+        filterCitys: []
     },
-  },
-  async created() {
-    await this.getListCity();
-  },
-
-  computed: {
-    ...mapState({
-      selectCitys: (state) => state.selectCitys,
-    }),
-    ...mapGetters({
-      citys: "getCitys",
-      filterCitys: "getFilterCitys",
-    }),
-  },
-
-  mounted() {},
-
-  methods: {
-    ...mapActions({ getListCity: "getCitys" }),
-    ...mapMutations({ setFilterCitys: "setFilterCitys" }),
-    handleClick() {
-      this.focused = !this.focused;
+    getters: {
+        getCitys(state) {
+            return state.citys;
+        },
+        getSearch(state) {
+            return state.search;
+        },
+        getSelectCitys(state) {
+            return state.selectCitys;
+        },
+        getFilterCitys(state) {
+            return state.filterCitys;
+        },
     },
-    ...mapActions({
-      addSelectField: "addSelectField",
-      removeSelectField: "removeSelectField",
-    }),
-    handleInput(e) {
-      this.search = e.target.value
+    actions: {
+        getCitys({ commit }) {
+            axios
+                .get(baseUrl)
+                .then((response) => {
+                    commit("setCitys", response.data);
+                    commit("setFilterCitys", response.data);
+                })
+                .catch((e) => {
+                    this.errors.push(e);
+                });
+        },
+        addSelectField({ commit }, city) {
+            commit("addSelectCitys", city);
+        },
+        removeSelectField({ commit }, city) {
+            commit("removeSelectCitys", city);
+        },
+        filterSearch({ commit }, value) {
+            commit("filterCitys", value);
+        },
     },
-    selectedCitys(e, city) {
-      if (e.target.checked) {
-        this.addSelectField(city);
-      } else {
-        this.removeSelectField(city.name);
-      }
+    mutations: {
+        setCitys(state, citys) {
+            state.citys = citys;
+        },
+        addSelectCitys(state, city) {
+            state.selectCitys.push(city.name);
+        },
+        removeSelectCitys(state, name) {
+            let index = state.selectCitys.indexOf(name);
+            state.selectCitys.splice(index, 1);
+        },
+        setFilterCitys(state, citys) {
+            state.filterCitys = citys;
+        },
     },
-    removeSelectCity(city) {
-      this.removeSelectField(city);
-    },
-  },
-};
-</script>
-
-<style scoped></style>
+});
